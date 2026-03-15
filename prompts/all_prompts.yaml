@@ -1,0 +1,111 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# RSAT — Prompt Templates
+# ═══════════════════════════════════════════════════════════════════════════════
+
+
+# ── 1. System Prompt ─────────────────────────────────────────────────────────
+system_prompt: >
+  You are a precise table question answering assistant.
+  Always respond with valid JSON containing reasoning steps with cell citations.
+
+
+# ── 2. Model Input Template ──────────────────────────────────────────────────
+# Defined in: src/data/data_formats.py :: format_model_input()
+model_input_template: |
+  Given the following table and question, provide your reasoning and answer.
+
+  For each reasoning step, cite the specific table cells [row_index, col_index]
+  that support it.
+
+  Table:
+  {table_indexed}
+
+  Question: {question}
+
+  Respond in this exact JSON format:
+  {
+    "reasoning_steps": [
+      {"step": "your reasoning here", "cited_cells": [[row_i, col_j], ...]},
+      ...
+    ],
+    "answer": "your final answer"
+  }
+
+
+# ── 3. SFT Data Generation Prompt ───────────────────────────────────────────
+# Defined in: src/data/generate_sft_data.py :: TRACE_GENERATION_PROMPT
+sft_generation_prompt: |
+  You are generating training data for a table QA system that must cite its sources.
+
+  Given a table and question, produce a JSON response with step-by-step reasoning
+  where each step cites specific table cells.
+
+  Table (with [row_index, col_index] labels):
+  {table_indexed}
+
+  Question: {question}
+  Correct answer: {answer}
+
+  Generate 2-4 reasoning steps that lead to the answer.
+  Each step MUST cite the exact cells it uses with [row_index, col_index] coordinates.
+
+  Rules:
+  - Only cite cells that ACTUALLY EXIST in the table.
+  - Only cite cells that DIRECTLY SUPPORT the step's claim.
+  - Be precise — cite the minimum cells needed.
+  - Each step should make one clear logical point.
+  - The final step should arrive at the answer.
+
+  Respond with ONLY this JSON (no markdown, no explanation):
+  {"reasoning_steps": [{"step": "...", "cited_cells": [[row_i, col_j], ...]}, ...], "answer": "{answer}"}
+
+
+# ── 4. Faithfulness Judge Prompt ─────────────────────────────────────────────
+# Defined in: src/utils/groq_client.py :: FAITHFULNESS_JUDGE_PROMPT
+faithfulness_judge_prompt: |
+  Evaluate whether the following reasoning step is faithfully supported by
+  the cited table cells.
+
+  Reasoning step: "{reasoning_step}"
+
+  Cited cell contents: {cited_cells_text}
+
+  Judge whether the reasoning step:
+  1. Is directly supported by the information in the cited cells
+  2. Does not introduce claims beyond what the cells contain
+  3. Correctly interprets the cell values (including numerical comparisons)
+
+  Respond with ONLY this JSON:
+  {"faithful": true/false, "score": 0.0 to 1.0, "explanation": "one sentence reason"}
+
+
+# ── 5. Post-hoc Attribution Prompts (Baseline 3) ────────────────────────────
+# Defined in: src/evaluation/evaluate.py :: generate_posthoc_outputs()
+posthoc_cot_prompt: |
+  Given the following table, answer the question with step-by-step reasoning.
+
+  Table:
+  {table_flat}
+
+  Question: {question}
+
+  Think step by step, then give your final answer.
+
+posthoc_cite_prompt: |
+  Given the table below and your previous reasoning, cite the specific cells
+  that support each step.
+
+  Table (with indices):
+  {table_indexed}
+
+  Your reasoning:
+  {cot_response}
+
+  Now format this as JSON with cell citations:
+  {
+    "reasoning_steps": [
+      {"step": "your reasoning", "cited_cells": [[row_i, col_j], ...]},
+      ...
+    ],
+    "answer": "your answer"
+  }

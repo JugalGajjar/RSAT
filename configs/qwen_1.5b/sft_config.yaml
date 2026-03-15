@@ -1,0 +1,40 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# RSAT — Phase 1: SFT — Qwen/Qwen2.5-1.5B-Instruct
+# ═══════════════════════════════════════════════════════════════════════════════
+
+model:
+  name: "Qwen/Qwen2.5-1.5B-Instruct"
+  flash_attn: false
+  use_qlora: false
+  lora:
+    r: 32
+    alpha: 64
+    dropout: 0.05
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - gate_proj
+      - up_proj
+      - down_proj
+
+data:
+  train_file: "data/sft/rsat_sft_train.jsonl"
+  val_file: "data/sft/rsat_sft_val.jsonl"
+
+training:
+  output_dir: "checkpoints/qwen_1.5b/sft"
+  epochs: 3
+  batch_size: 4
+  gradient_accumulation: 4
+  learning_rate: 2.0e-4
+  scheduler: "cosine"
+  warmup_ratio: 0.05
+  max_seq_length: 2048
+  eval_steps: 50
+  save_total_limit: 3
+  load_best_model_at_end: true
+  metric_for_best_model: "eval_loss"
+  use_wandb: true
+  run_name: "rsat-sft-qwen_1.5b"

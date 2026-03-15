@@ -1,0 +1,54 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# RSAT — Phase 2: GRPO — meta-llama/Llama-3.1-8B-Instruct
+# ═══════════════════════════════════════════════════════════════════════════════
+
+model:
+  name: "meta-llama/Llama-3.1-8B-Instruct"
+  sft_checkpoint: "checkpoints/llama_8b/sft/final"
+  flash_attn: false
+  use_qlora: false
+  lora_rl:
+    r: 32
+    alpha: 64
+    dropout: 0.05
+    target_modules:
+      - q_proj
+      - k_proj
+      - v_proj
+      - o_proj
+      - gate_proj
+      - up_proj
+      - down_proj
+
+data:
+  train_file: "data/grpo/rsat_grpo_train.jsonl"
+  val_file: "data/grpo/rsat_grpo_val.jsonl"
+  max_examples: 500
+  max_eval_examples: 200
+
+training:
+  output_dir: "checkpoints/llama_8b/grpo_no_parsimony"
+  epochs: 1
+  batch_size: 4
+  gradient_accumulation: 4
+  learning_rate: 5.0e-5
+  scheduler: "cosine"
+  warmup_ratio: 0.1
+  max_completion_length: 1024
+  group_size: 8
+  temperature: 0.9
+  save_steps: 100
+  eval_steps: 100
+  use_wandb: true
+  run_name: "rsat-grpo-llama_8b-no_parsimony"
+
+reward:
+  lambda_citation: 0.3
+  lambda_faithfulness: 0.5
+  lambda_parsimony: 0.0
+  format_penalty: -1.0
+  answer_mode: "f1"
+  faithfulness_backend: "nli"
+  parsimony_soft_threshold: 3
+  parsimony_hard_threshold: 8
+  device: "cuda"

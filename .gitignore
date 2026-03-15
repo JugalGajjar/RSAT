@@ -1,0 +1,13 @@
+.vscode/
+__pycache__/
+.pytest_cache/
+.cache/
+checkpoints/
+data/raw/
+data/sft/batches/
+paper/
+results/
+wandb/
+*.pyc
+.env
+.DS_Store

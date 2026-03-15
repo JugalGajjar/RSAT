@@ -1,0 +1,18 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# RSAT — Evaluation — Qwen/Qwen2.5-1.5B-Instruct
+# ═══════════════════════════════════════════════════════════════════════════════
+
+evaluation:
+  model_path: "checkpoints/qwen_1.5b/grpo/final"
+  base_model: "Qwen/Qwen2.5-1.5B-Instruct"
+  use_qlora: false
+  flash_attn: false
+  output_dir: "results/qwen_1.5b"
+
+  eval_files:
+    - "data/grpo/rsat_grpo_test.jsonl"
+
+  max_eval_examples: 500
+  max_new_tokens: 1024
+
+  faithfulness_backend: "nli"

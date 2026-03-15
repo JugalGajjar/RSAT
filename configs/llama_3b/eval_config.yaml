@@ -1,0 +1,18 @@
+# ═══════════════════════════════════════════════════════════════════════════════
+# RSAT — Evaluation — meta-llama/Llama-3.2-3B-Instruct
+# ═══════════════════════════════════════════════════════════════════════════════
+
+evaluation:
+  model_path: "checkpoints/llama_3b/grpo/final"
+  base_model: "meta-llama/Llama-3.2-3B-Instruct"
+  use_qlora: false
+  flash_attn: false
+  output_dir: "results/llama_3b"
+
+  eval_files:
+    - "data/grpo/rsat_grpo_test.jsonl"
+
+  max_eval_examples: 500
+  max_new_tokens: 1024
+
+  faithfulness_backend: "nli"
