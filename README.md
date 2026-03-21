@@ -195,8 +195,8 @@ All experiments run on a single NVIDIA H100 80GB GPU.
 | SFT train | 630 | 135 | 135 | 900 |
 | SFT val | 70 | 15 | 15 | 100 |
 | GRPO train | | (combined) | | 38,647 |
-| GRPO val | | | | 16,624 |
-| GRPO test | | | | 19,126 |
+| GRPO val | | (combined) | | 16,624 |
+| GRPO test | | (combined) | | 19,126 |
 | **Total** | | | | **75,397** |
 
 ## Citation
