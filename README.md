@@ -1,6 +1,6 @@
 # RSAT: Structured Attribution Makes Small Language Models Faithful Table Reasoners
 
-[![Paper](https://img.shields.io/badge/Paper-ACL%202026-blue)](link-to-paper)
+[![Paper](https://img.shields.io/badge/Paper-ACL%202026-blue)](https://arxiv.org/abs/2605.00199)
 [![License: MIT](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
 [![Python 3.10+](https://img.shields.io/badge/Python-3.10+-yellow.svg)](https://www.python.org/)
 
@@ -195,14 +195,25 @@ All experiments run on a single NVIDIA H100 80GB GPU.
 | SFT train | 630 | 135 | 135 | 900 |
 | SFT val | 70 | 15 | 15 | 100 |
 | GRPO train | | (combined) | | 38,647 |
-| GRPO val | | (combined) | | 16,624 |
-| GRPO test | | (combined) | | 19,126 |
+| GRPO val | | | | 16,624 |
+| GRPO test | | | | 19,126 |
 | **Total** | | | | **75,397** |
 
 ## Citation
 
+**BIBTEX:**
 ```
-To be updated.
+@article{gajjar2026rsat,
+  title={RSAT: Structured Attribution Makes Small Language Models Faithful Table Reasoners},
+  author={Gajjar, Jugal and Subramaniakuppusamy, Kamalasankari},
+  journal={arXiv preprint arXiv:2605.00199},
+  year={2026}
+}
+```
+
+**APA:**
+```
+Gajjar, J., & Subramaniakuppusamy, K. (2026). RSAT: Structured Attribution Makes Small Language Models Faithful Table Reasoners. arXiv preprint arXiv:2605.00199.
 ```
 
 ## License
